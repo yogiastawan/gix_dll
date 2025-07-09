@@ -1,0 +1,184 @@
+#include <gix_dll/gix_dll.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#undef __internal_gix_dll_new
+
+struct GixNode {
+    void *prev;
+    void *next;
+    void *data;
+};
+
+GixDLl *__internal_gix_dll_new(uint64_t data_size) {
+    GixDLl *gdll = malloc(sizeof(GixDLl));
+
+    gdll->head = NULL;
+    gdll->tail = NULL;
+    gdll->size = 0;
+    gdll->data_size = data_size;
+
+    return gdll;
+}
+
+GixNode *gix_dll_append(GixDLl *gdll, const void *val) {
+    if (!gdll || !val) return NULL;
+
+    GixNode *node = malloc(sizeof(GixNode));
+    if (!node) return NULL;
+
+    node->data = malloc(gdll->data_size);
+    if (!node->data) {
+        free(node);
+        return NULL;
+    }
+    memcpy(node->data, val, gdll->data_size);
+
+    node->next = NULL;
+    node->prev = gdll->tail;
+
+    if (gdll->tail) {
+        gdll->tail->next = node;
+    } else {
+        gdll->head = node;
+    }
+
+    gdll->tail = node;
+    gdll->size++;
+
+    return node;
+}
+
+GixNode *gix_dll_prepend(GixDLl *gdll, const void *val) {
+    if (!gdll || !val) return NULL;
+
+    GixNode *node = malloc(sizeof(GixNode));
+    if (!node) return NULL;
+
+    node->data = malloc(gdll->data_size);
+    if (!node->data) {
+        free(node);
+        return NULL;
+    }
+    memcpy(node->data, val, gdll->data_size);
+
+    node->prev = NULL;
+    node->next = gdll->head;
+
+    if (gdll->head) {
+        gdll->head->prev = node;
+    } else {
+        gdll->tail = node;
+    }
+
+    gdll->head = node;
+    gdll->size++;
+
+    return node;
+}
+
+GixNode *gix_dll_insert_after(GixDLl *gdll, GixNode *node, const void *val) {
+    if (!gdll || !node || !val) return NULL;
+
+    GixNode *new_node = malloc(sizeof(GixNode));
+    if (!new_node) return NULL;
+
+    new_node->data = malloc(gdll->data_size);
+    if (!new_node->data) {
+        free(new_node);
+        return NULL;
+    }
+    memcpy(new_node->data, val, gdll->data_size);
+
+    new_node->prev = node;
+    new_node->next = node->next;
+
+    if (node->next) {
+        GixNode *next = node->next;
+        next->prev = new_node;
+    } else {
+        gdll->tail = new_node;
+    }
+
+    node->next = new_node;
+    gdll->size++;
+
+    return new_node;
+}
+
+GixNode *gix_dll_insert_before(GixDLl *gdll, GixNode *node, const void *val) {
+    if (!gdll || !node || !val) return NULL;
+
+    GixNode *new_node = malloc(sizeof(GixNode));
+    if (!new_node) return NULL;
+
+    new_node->data = malloc(gdll->data_size);
+    if (!new_node->data) {
+        free(new_node);
+        return NULL;
+    }
+    memcpy(new_node->data, val, gdll->data_size);
+
+    new_node->prev = node->prev;
+    new_node->next = node;
+
+    if (node->prev) {
+        GixNode *prev = node->prev;
+        prev->next = new_node;
+    } else {
+        gdll->head = new_node;
+    }
+
+    node->prev = new_node;
+    gdll->size++;
+
+    return new_node;
+}
+void gix_dll_remove(GixDLl *gdll, GixNode *node) {
+    if (!gdll || gdll->size == 0 || !node) return;
+
+    if (node->prev) {
+        GixNode *tmp = node->prev;
+        tmp->next = node->next;
+    } else
+        gdll->head = node->next;
+
+    if (node->next) {
+        GixNode *tmp = node->next;
+        tmp->prev = node->prev;
+    } else
+        gdll->tail = node->prev;
+
+    free(node);
+
+    gdll->size--;
+}
+
+void gix_dll_destroy(GixDLl *gdll) {
+    if (!gdll) return;
+
+    GixNode *node = gdll->head;
+    while (node) {
+        GixNode *next = node->next;
+        free(node);
+        node = next;
+    }
+
+    gdll->head = NULL;
+    gdll->tail = NULL;
+    gdll->size = 0;
+}
+
+void gix_dll_print(GixDLl *gdll, void (*print_fn)(const void *)) {
+    if (!gdll || !print_fn) return;
+
+    printf("[");
+    GixNode *node = gdll->head;
+    while (node) {
+        print_fn(node->data);
+        if (node->next) printf(", ");
+        node = node->next;
+    }
+    printf("]\n");
+}
