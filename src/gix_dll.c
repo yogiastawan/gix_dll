@@ -182,3 +182,29 @@ void gix_dll_print(GixDLL *gdll, void (*print_fn)(const void *)) {
     }
     printf("]\n");
 }
+
+void *gix_node_get_value(GixNode *node) {
+    if (!node) {
+        return NULL;
+    }
+    return node->data;
+}
+void gix_node_set_value(GixDLL *gdll, GixNode *node, const void *val) {
+    if (!node || !gdll || !val) {
+        return;
+    }
+
+    memcpy(node->data, val, gdll->data_size);
+}
+GixNode *gix_node_prev(GixNode *node) {
+    if (!node) {
+        return NULL;
+    }
+    return node->prev;
+}
+GixNode *gix_node_next(GixNode *node) {
+    if (!node) {
+        return NULL;
+    }
+    return node->next;
+}
