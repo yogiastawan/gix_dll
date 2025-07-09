@@ -11,8 +11,8 @@ struct GixNode {
     void *data;
 };
 
-GixDLl *__internal_gix_dll_new(uint64_t data_size) {
-    GixDLl *gdll = malloc(sizeof(GixDLl));
+GixDLL *__internal_gix_dll_new(size_t data_size) {
+    GixDLL *gdll = malloc(sizeof(GixDLL));
 
     gdll->head = NULL;
     gdll->tail = NULL;
@@ -22,7 +22,7 @@ GixDLl *__internal_gix_dll_new(uint64_t data_size) {
     return gdll;
 }
 
-GixNode *gix_dll_append(GixDLl *gdll, const void *val) {
+GixNode *gix_dll_append(GixDLL *gdll, const void *val) {
     if (!gdll || !val) return NULL;
 
     GixNode *node = malloc(sizeof(GixNode));
@@ -50,7 +50,7 @@ GixNode *gix_dll_append(GixDLl *gdll, const void *val) {
     return node;
 }
 
-GixNode *gix_dll_prepend(GixDLl *gdll, const void *val) {
+GixNode *gix_dll_prepend(GixDLL *gdll, const void *val) {
     if (!gdll || !val) return NULL;
 
     GixNode *node = malloc(sizeof(GixNode));
@@ -78,7 +78,7 @@ GixNode *gix_dll_prepend(GixDLl *gdll, const void *val) {
     return node;
 }
 
-GixNode *gix_dll_insert_after(GixDLl *gdll, GixNode *node, const void *val) {
+GixNode *gix_dll_insert_after(GixDLL *gdll, GixNode *node, const void *val) {
     if (!gdll || !node || !val) return NULL;
 
     GixNode *new_node = malloc(sizeof(GixNode));
@@ -107,7 +107,7 @@ GixNode *gix_dll_insert_after(GixDLl *gdll, GixNode *node, const void *val) {
     return new_node;
 }
 
-GixNode *gix_dll_insert_before(GixDLl *gdll, GixNode *node, const void *val) {
+GixNode *gix_dll_insert_before(GixDLL *gdll, GixNode *node, const void *val) {
     if (!gdll || !node || !val) return NULL;
 
     GixNode *new_node = malloc(sizeof(GixNode));
@@ -135,7 +135,7 @@ GixNode *gix_dll_insert_before(GixDLl *gdll, GixNode *node, const void *val) {
 
     return new_node;
 }
-void gix_dll_remove(GixDLl *gdll, GixNode *node) {
+void gix_dll_remove(GixDLL *gdll, GixNode *node) {
     if (!gdll || gdll->size == 0 || !node) return;
 
     if (node->prev) {
@@ -155,7 +155,7 @@ void gix_dll_remove(GixDLl *gdll, GixNode *node) {
     gdll->size--;
 }
 
-void gix_dll_destroy(GixDLl *gdll) {
+void gix_dll_destroy(GixDLL *gdll) {
     if (!gdll) return;
 
     GixNode *node = gdll->head;
@@ -170,7 +170,7 @@ void gix_dll_destroy(GixDLl *gdll) {
     gdll->size = 0;
 }
 
-void gix_dll_print(GixDLl *gdll, void (*print_fn)(const void *)) {
+void gix_dll_print(GixDLL *gdll, void (*print_fn)(const void *)) {
     if (!gdll || !print_fn) return;
 
     printf("[");

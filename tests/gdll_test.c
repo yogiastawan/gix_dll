@@ -6,7 +6,7 @@ static void print_dll_int(const void *data);
 
 int main(int argc, char *argv[]) {
     // setbuf(stdout, NULL);
-    GixDLl *gdll = gix_dll_new(int);
+    GixDLL *gdll = gix_dll_new(int);
 
     int a = 10, b = 20, c = 5, d = 30, e = 15, f = 25;
     GixNode *node_a = gix_dll_append(gdll, &a);
