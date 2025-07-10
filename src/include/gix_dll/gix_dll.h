@@ -1,6 +1,7 @@
 #ifndef __GIX_DLL_H__
 #define __GIX_DLL_H__
 
+#include <stdbool.h>
 #include <stddef.h>
 
 #ifdef __cplusplus
@@ -26,11 +27,11 @@ GixNode *gix_dll_append(GixDLL *gdll, const void *val);
 GixNode *gix_dll_prepend(GixDLL *gdll, const void *val);
 GixNode *gix_dll_insert_after(GixDLL *gdll, GixNode *node, const void *val);
 GixNode *gix_dll_insert_before(GixDLL *gdll, GixNode *node, const void *val);
-void gix_dll_remove(GixDLL *gdll, GixNode *node);
+bool gix_dll_remove(GixDLL *gdll, GixNode *node);
 void gix_dll_destroy(GixDLL *gdll);
 void gix_dll_print(GixDLL *gdll, void (*print_fn)(const void *));
 const void *gix_dll_get_value_at(GixDLL *gdll, size_t index);
-void gix_dll_remove_at(GixDLL *gdll, size_t index);
+bool gix_dll_remove_at(GixDLL *gdll, size_t index);
 void gix_dll_set_value_at(GixDLL *gdll, size_t index, const void *val);
 
 const void *gix_node_get_value(GixNode *node);
