@@ -19,6 +19,8 @@ int main(int argc, char *argv[]) {
     gix_dll_print(gdll, print_dll_int);
     assert(gdll->size == 6);
     gix_dll_remove(gdll, node_a);
+    assert(gdll->size == 5);
+    assert(b == *(int *)gix_node_get_value(node_b));
     gix_dll_print(gdll, print_dll_int);
 
     gix_dll_destroy(gdll);
