@@ -31,6 +31,7 @@ void gix_dll_destroy(GixDLL *gdll);
 void gix_dll_print(GixDLL *gdll, void (*print_fn)(const void *));
 const void *gix_dll_get_value_at(GixDLL *gdll, size_t index);
 void gix_dll_remove_at(GixDLL *gdll, size_t index);
+void gix_dll_set_value_at(GixDLL *gdll, size_t index, const void *val);
 
 const void *gix_node_get_value(GixNode *node);
 void gix_node_set_value(GixNode *node, const void *val);

@@ -262,6 +262,32 @@ void gix_dll_remove_at(GixDLL *gdll, size_t index) {
     gix_dll_remove(gdll, node);
 }
 
+void gix_dll_set_value_at(GixDLL *gdll, size_t index, const void *val) {
+    if (!gdll || index >= gdll->size) {
+        return;
+    }
+
+    GixNode *node;
+    size_t i;
+
+    if (index < gdll->size / 2) {
+        node = gdll->head;
+        i = 0;
+        while (i < index && node) {
+            node = node->next;
+            i++;
+        }
+    } else {
+        node = gdll->tail;
+        i = gdll->size - 1;
+        while (i > index && node) {
+            node = node->prev;
+            i--;
+        }
+    }
+    gix_node_set_value(node, val);
+}
+
 const void *gix_node_get_value(GixNode *node) {
     if (!node) {
         return NULL;

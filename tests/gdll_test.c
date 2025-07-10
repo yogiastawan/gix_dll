@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
     // setbuf(stdout, NULL);
     GixDLL *gdll = gix_dll_new(int);
 
-    int a = 10, b = 20, c = 5, d = 30, e = 15, f = 25;
+    int a = 10, b = 20, c = 5, d = 30, e = 15, f = 25, g = 60;
     GixNode *node_a = gix_dll_append(gdll, &a);
     GixNode *node_b = gix_dll_append(gdll, &b);
     GixNode *node_c = gix_dll_prepend(gdll, &c);
@@ -25,6 +25,9 @@ int main(int argc, char *argv[]) {
     gix_dll_print(gdll, print_dll_int);
 
     gix_dll_remove_at(gdll, 1);
+    gix_dll_print(gdll, print_dll_int);
+
+    gix_dll_set_value_at(gdll, 1, &g);
     gix_dll_print(gdll, print_dll_int);
 
     gix_dll_destroy(gdll);
