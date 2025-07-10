@@ -194,7 +194,10 @@ void gix_dll_destroy(GixDLL *gdll) {
 }
 
 void gix_dll_print(GixDLL *gdll, void (*print_fn)(const void *)) {
-    if (!gdll || !print_fn) return;
+    if (!gdll || !print_fn) {
+        printf("[none]\n");
+        return;
+    }
 
     printf("[");
     GixNode *node = gdll->head;
@@ -204,6 +207,59 @@ void gix_dll_print(GixDLL *gdll, void (*print_fn)(const void *)) {
         node = node->next;
     }
     printf("]\n");
+}
+
+const void *gix_dll_get_value_at(GixDLL *gdll, size_t index) {
+    if (!gdll || index >= gdll->size) {
+        return NULL;
+    }
+
+    GixNode *node;
+    size_t i;
+
+    if (index < gdll->size / 2) {
+        node = gdll->head;
+        i = 0;
+        while (i < index && node) {
+            node = node->next;
+            i++;
+        }
+    } else {
+        node = gdll->tail;
+        i = gdll->size - 1;
+        while (i > index && node) {
+            node = node->prev;
+            i--;
+        }
+    }
+
+    return node->data;
+}
+
+void gix_dll_remove_at(GixDLL *gdll, size_t index) {
+    if (!gdll || index >= gdll->size) {
+        return;
+    }
+
+    GixNode *node;
+    size_t i;
+
+    if (index < gdll->size / 2) {
+        node = gdll->head;
+        i = 0;
+        while (i < index && node) {
+            node = node->next;
+            i++;
+        }
+    } else {
+        node = gdll->tail;
+        i = gdll->size - 1;
+        while (i > index && node) {
+            node = node->prev;
+            i--;
+        }
+    }
+    gix_dll_remove(gdll, node);
 }
 
 const void *gix_node_get_value(GixNode *node) {
