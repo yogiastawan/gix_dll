@@ -183,7 +183,7 @@ void gix_dll_print(GixDLL *gdll, void (*print_fn)(const void *)) {
     printf("]\n");
 }
 
-void *gix_node_get_value(GixNode *node) {
+const void *gix_node_get_value(GixNode *node) {
     if (!node) {
         return NULL;
     }

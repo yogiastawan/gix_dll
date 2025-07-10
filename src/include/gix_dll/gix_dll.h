@@ -30,7 +30,7 @@ void gix_dll_remove(GixDLL *gdll, GixNode *node);
 void gix_dll_destroy(GixDLL *gdll);
 void gix_dll_print(GixDLL *gdll, void (*print_fn)(const void *));
 
-void *gix_node_get_value(GixNode *node);
+const void *gix_node_get_value(GixNode *node);
 void gix_node_set_value(GixDLL *gdll, GixNode *node, const void *val);
 GixNode *gix_node_prev(GixNode *node);
 GixNode *gix_node_next(GixNode *node);
