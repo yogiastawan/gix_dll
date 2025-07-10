@@ -33,7 +33,7 @@ const void *gix_dll_get_value_at(GixDLL *gdll, size_t index);
 void gix_dll_remove_at(GixDLL *gdll, size_t index);
 
 const void *gix_node_get_value(GixNode *node);
-void gix_node_set_value(GixDLL *gdll, GixNode *node, const void *val);
+void gix_node_set_value(GixNode *node, const void *val);
 GixNode *gix_node_prev(GixNode *node);
 GixNode *gix_node_next(GixNode *node);
 

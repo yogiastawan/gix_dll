@@ -268,7 +268,8 @@ const void *gix_node_get_value(GixNode *node) {
     }
     return node->data;
 }
-void gix_node_set_value(GixDLL *gdll, GixNode *node, const void *val) {
+void gix_node_set_value(GixNode *node, const void *val) {
+    GixDLL *gdll = node->holder;
     if (!node || !gdll || !val) {
         return;
     }
