@@ -17,18 +17,27 @@ int main(int argc, char *argv[]) {
     GixNode *node_f = gix_dll_insert_before(gdll, node_c, &f);
 
     gix_dll_print(gdll, print_dll_int);
+    // [25, 5, 10, 30, 20, 15]
+
     assert(gdll->size == 6);
     gix_dll_remove(gdll, node_a);
     assert(gdll->size == 5);
     assert(b == *(int *)gix_node_get_value(node_b));
     assert(c == *(int *)gix_dll_get_value_at(gdll, 1));
     gix_dll_print(gdll, print_dll_int);
+    // [25, 5, 30, 20, 15]
 
-    gix_dll_remove_at(gdll, 1);
+    gix_dll_remove_at(gdll, 1);  // **REMOVE NODE_C**
     gix_dll_print(gdll, print_dll_int);
+    // [25, 30, 20, 15]
+    bool res = gix_node_set_value(
+        node_c,
+        &g);  // false because node_c is already removed in **REMOVE NODE_C**
+    assert(!res);
 
     gix_dll_set_value_at(gdll, 1, &g);
     gix_dll_print(gdll, print_dll_int);
+    // [25, 60, 20, 15]
 
     gix_dll_destroy(gdll);
     return 0;

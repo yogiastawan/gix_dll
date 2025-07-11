@@ -171,8 +171,11 @@ bool gix_dll_remove(GixDLL *gdll, GixNode *node) {
     } else
         gdll->tail = node->prev;
 
+    free(node->data);
+    node->data = NULL;
+    node->prev = NULL;
+    node->holder = NULL;
     free(node);
-    node = NULL;
 
     gdll->size--;
     return true;
@@ -184,17 +187,22 @@ void gix_dll_destroy(GixDLL *gdll) {
     GixNode *node = gdll->head;
     while (node) {
         GixNode *next = node->next;
+        free(node->data);
+        node->data = NULL;
+        node->holder = NULL;
+        node->prev = NULL;
+        node->next = NULL;
         free(node);
+
         node = next;
-        node = NULL;
     }
 
     gdll->head = NULL;
     gdll->tail = NULL;
     gdll->size = 0;
+    gdll->data_size = 0;
 
     free(gdll);
-    gdll = NULL;
 }
 
 void gix_dll_print(GixDLL *gdll, void (*print_fn)(const void *)) {
@@ -266,9 +274,9 @@ bool gix_dll_remove_at(GixDLL *gdll, size_t index) {
     return gix_dll_remove(gdll, node);
 }
 
-void gix_dll_set_value_at(GixDLL *gdll, size_t index, const void *val) {
+bool gix_dll_set_value_at(GixDLL *gdll, size_t index, const void *val) {
     if (!gdll || index >= gdll->size) {
-        return;
+        return false;
     }
 
     GixNode *node;
@@ -289,7 +297,7 @@ void gix_dll_set_value_at(GixDLL *gdll, size_t index, const void *val) {
             i--;
         }
     }
-    gix_node_set_value(node, val);
+    return gix_node_set_value(node, val);
 }
 
 const void *gix_node_get_value(GixNode *node) {
@@ -298,13 +306,14 @@ const void *gix_node_get_value(GixNode *node) {
     }
     return node->data;
 }
-void gix_node_set_value(GixNode *node, const void *val) {
+bool gix_node_set_value(GixNode *node, const void *val) {
     GixDLL *gdll = node->holder;
     if (!node || !gdll || !val) {
-        return;
+        return false;
     }
 
     memcpy(node->data, val, gdll->data_size);
+    return true;
 }
 GixNode *gix_node_prev(GixNode *node) {
     if (!node) {
